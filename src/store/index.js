@@ -23,6 +23,11 @@ export default new Vuex.Store({
         commit('GET_TUTORIALS', response.data)
       })
     },
+    deleteTutorials({ dispatch }) {
+      Axios.delete('https://rayentutorialtestapp.azurewebsites.net/deletetutorials').then(() => {
+        dispatch('getTutorials')
+      })
+    },
   },
   modules: {
   }
