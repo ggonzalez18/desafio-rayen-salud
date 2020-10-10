@@ -8,11 +8,8 @@
             <v-text-field v-model="searchDescription" append-icon="mdi-magnify" label="Busca un tutorial" single-line hide-details
             v-on:keyup.enter="filterDescription(searchDescription)"></v-text-field>
           </v-col>
-          <v-col cols="4">
-            <v-select label="Ordenado por" v-model="selectedItem" :items="items" @input="setSelected(selectedItem)" item-value="value"></v-select>
-          </v-col>
-          <v-col cols="2">
-            <v-btn>Buscar</v-btn>
+          <v-col cols="6">
+            <v-select label="Ordenado por" v-model="selectedItem" :items="items" item-text="label" @input="sortBy()" item-value="value"></v-select>
           </v-col>
           </v-row>
 
@@ -61,48 +58,28 @@ export default {
   },
   data() {
     return {
+      selectedItem: ''
     }
   },
   created() {
     this.getTutorials()
   },
   methods: {
-    ...mapActions(['getTutorials', 'deleteTutorials', 'setItem', 'filterTutorials']),
+    ...mapActions(['getTutorials', 'deleteTutorials', 'setItem']),
     deleteAll() {
       let confirmation = confirm("¿Quieres eliminar todos los tutoriales definitivamente?")
       if (confirmation) {
         this.deleteTutorials()
       }
     },
-    setSelected(value){
-      this.selectedItem = value  
-      this.getTutorials()
-    },
-    filterDescription(value) {
-      this.filterTutorials(value)
-      // return this.tutorials.filter((tutorial) => {
-      //   return tutorial.toLowerCase().includes(this.searchDescription.toLowerCase())
-      // })
+    sortBy(){
+      console.log(this.selectedItem)
+      this.setItem(this.selectedItem)
+      this.tutorials.sort((a,b) => a[this.selectedItem] < b[this.selectedItem] ? -1 : 1)
     }
   },
   computed: {
-    ...mapState(['tutorials', 'items', 'selectedItem', 'searchDescription']),
-    selectedItem: {
-      get () {
-        return this.$store.state.selectedItem 
-      },
-      set (newItem) {
-        return this.$store.dispatch('setItem', newItem)
-      }
-    },
-    searchDescription: {
-      get () {
-        return this.$store.state.searchDescription 
-      },
-      set (newDescription) {
-        return this.$store.dispatch('filterTutorials', newDescription)
-      }
-    },
-  },
+    ...mapState(['tutorials', 'items', 'ItemSelected', 'searchDescription']),
+  }
 }
 </script>
