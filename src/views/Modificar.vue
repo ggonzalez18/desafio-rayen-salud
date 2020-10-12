@@ -1,7 +1,7 @@
 <template>
-  <div class="tutorial">
-    <nav-agregar></nav-agregar>
-    <v-container>
+  <div>
+    <nav-modificar></nav-modificar>
+    <!-- <v-container>
       <v-row>
         <v-col>
           <v-form ref="form" v-model="valid" lazy-validation>
@@ -20,81 +20,65 @@
               </v-date-picker>
             </v-dialog>
 
-            <v-btn color="error" class="mr-4" @click="reset">Limpiar campos</v-btn>
+            <v-btn class="ma-2" outlined color="indigo" @click="deleteOneTutorial">ELIMINAR</v-btn>
+            <v-spacer></v-spacer>
             <v-btn color="purple darken-4" dark @click="agregar">AGREGAR</v-btn>
           </v-form>
         </v-col>
       </v-row>
-
-      <v-dialog v-model="dialog" max-width="300">
-      <v-card color="black" dark class="pt-4">
-        <v-card-text>
-          Tutorial guardado con éxito
-          <v-btn color="purple darken-4" dark class="ml-2" @click="dialog = false">ok</v-btn>    
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    </v-container>
+      </v-container> -->
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import NavAgregar from '@/components/NavAgregar.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
+import NavModificar from '@/components/NavModificar.vue'
 
 export default {
-  name: 'Agregar',
   components: {
-    NavAgregar,
+    NavModificar
   },
-  data: () => ({
+  data() {
+    return {
+      tutorials: {
+        titulo: this.tutorial.nombre,
+        profesor: this.tutorial.profesor,
+        materia: this.tutorial.materia,
+        fecha: this.tutorial.picker,
+      },
       valid: true,
-      titulo: '',
       tituloRules: [
         v => !!v || 'titulo',
         v => (v && v.length <= 50) || 'titulo no puede exceder los 50 caracteres',
       ],
-      profesor: '',
       profesorRules: [
         v => !!v || 'Profesor',
         v => (v && v.length <= 20) || 'Nombre del profesor no puede exceder los 20 caracteres',
       ],
-      materia: '',
       materiaRules: [
         v => !!v || 'Materia',
         v => (v && v.length <= 15) || 'Materia no puede exceder los 15 caracteres',
       ],
-      picker: '',
       menu: false,
       modal: false,
       dialog: false
-  }),
-
-    methods: {
-      ...mapActions(['AddTutorial']),
-      validate () {
-        this.$refs.form.validate()
-      },
-      reset () {
-        this.$refs.form.reset()
-      },
-      agregar() {
-        this.validate()
-        let newTutorial = {
-          nombre: this.titulo,
-          profesor: this.profesor,
-          materia: this.materia,
-          fecha: this.picker
-        }
-        this.AddTutorial(newTutorial)
-        this.dialog = true
-        this.reset()
-      },
-    },
-    computed: {
     }
+  },
+  methods: {
+    ...mapActions(['getTutorials', 'deleteTutorial']),
+    deleteOneTutorial(id) {
+      let confirmation = confirm("¿Seguro que quieres eliminar el tutorial?")
+      if (confirmation) {
+        this.deleteTutorial(id)
+      }
+    },
+  },
+  computed: {
+    ...mapState(['tutorials', 'tutorial']),
+  }
 }
 </script>
 
+<style>
+
+</style>

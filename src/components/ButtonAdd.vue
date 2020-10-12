@@ -20,7 +20,7 @@ export default {
 .button_add { 
     display:scroll;
     position:fixed;
-    bottom:220px;
+    bottom:20px;
     right:20px;
 }
 </style>

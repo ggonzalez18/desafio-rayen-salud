@@ -24,28 +24,34 @@ export default new Vuex.Store({
         SET_ITEM(state, selectedItem) {
             state.ItemSelected = selectedItem
         },
-        // SET_NEW_TUTORIAL(state, tutorial) {
-        //     state.newTutorial = tutorial
-        // },
     },
     actions: {
-        getTutorials({ commit }) {
+        getTutorials({ commit }) { //llamado para mostrar todos los tutoriales
             Axios.get('https://rayentutorialtestapp.azurewebsites.net/tutorials').then((response) => {
                 commit('SET_TUTORIALS', response.data)
             })
         },
-        setItem({ commit, state }, selectedItem) {
+        getTutorial({ commit }) { //llamado para mostrar 1 tutorial
+            Axios.get('https://rayentutorialtestapp.azurewebsites.net/tutorials').then((response) => {
+                commit('SET_TUTORIAL', response.data)
+            })
+        },
+        setItem({ commit, state }, selectedItem) { //selecciona un campo en el select y asigna para ordenar
             commit('SET_ITEM', selectedItem)
             return state.ItemSelected
         },
-        deleteTutorials({ dispatch }) {
+        deleteTutorials({ dispatch }) { //elimina TODOS los tutoriales
             Axios.delete('https://rayentutorialtestapp.azurewebsites.net/deletetutorials').then(() => {
                 dispatch('getTutorials')
             })
         },
-        AddTutorial({ dispatch }, newTutorial) {
-            Axios.post('https://rayentutorialtestapp.azurewebsites.net/createtutorial', newTutorial).then((response) => {
-                console.log(response)
+        deleteTutorial({ dispatch }, id) { //elimina solo 1 tutorial
+            Axios.delete(`https://rayentutorialtestapp.azurewebsites.net/deletetutorial/${id}`).then(() => {
+                dispatch('getTutorial')
+            })
+        },
+        AddTutorial({ dispatch }, newTutorial) { //agrega nuevo tutorial
+            Axios.post('https://rayentutorialtestapp.azurewebsites.net/createtutorial', newTutorial).then(() => {
                 dispatch('getTutorials', newTutorial)
             }).catch((error) => {
                 console.log(error)
