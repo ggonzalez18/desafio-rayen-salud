@@ -24,6 +24,9 @@ export default new Vuex.Store({
         SET_ITEM(state, selectedItem) {
             state.ItemSelected = selectedItem
         },
+        // SET_NEW_TUTORIAL(state, tutorial) {
+        //     state.newTutorial = tutorial
+        // },
     },
     actions: {
         getTutorials({ commit }) {
@@ -40,6 +43,15 @@ export default new Vuex.Store({
                 dispatch('getTutorials')
             })
         },
+        AddTutorial({ dispatch }, newTutorial) {
+            Axios.post('https://rayentutorialtestapp.azurewebsites.net/createtutorial', newTutorial).then((response) => {
+                console.log(response)
+                dispatch('getTutorials', newTutorial)
+            }).catch((error) => {
+                console.log(error)
+            })
+        },
+
     },
     modules: {}
 })
