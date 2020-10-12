@@ -1,13 +1,8 @@
 <template>
-
   <div class="tutorial">
     <nav-agregar></nav-agregar>
     <v-container>
-      <v-form
-    ref="form"
-    v-model="valid"
-    lazy-validation
-  >
+      <v-form ref="form" v-model="valid" lazy-validation>
     <v-text-field
       v-model="titulo"
       :counter="10"
